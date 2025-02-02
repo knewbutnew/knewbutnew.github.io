@@ -24,11 +24,11 @@
             background: #fff;
         }
 
-        .kg-border input, .kg-border select, .kg-border .toggle-btn, .kg-border .calc-btn {
+        .kg-border input, .kg-border select {
             border: 2px solid #FF9800;
         }
 
-        .lbs-border input, .lbs-border select, .lbs-border .toggle-btn, .lbs-border .calc-btn {
+        .lbs-border input, .lbs-border select {
             border: 2px solid #4CAF50;
         }
 
@@ -53,37 +53,18 @@
             font-weight: bold;
         }
 
-        .kg-border .calc-btn {
+        .kg-border .calc-btn, .kg-border .toggle-btn {
             background: #FF9800;
             color: white;
         }
 
-        .lbs-border .calc-btn {
+        .lbs-border .calc-btn, .lbs-border .toggle-btn {
             background: #4CAF50;
             color: white;
         }
 
-        .calc-btn:hover {
+        .calc-btn:hover, .toggle-btn:hover {
             opacity: 0.8;
-        }
-
-        .toggle-btn {
-            background: white;
-            color: black;
-        }
-
-        .result-container {
-            margin-top: 15px;
-        }
-
-        .result-box {
-            max-width: 400px;
-            margin: 15px auto;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            display: none;
         }
     </style>
 </head>
@@ -111,9 +92,7 @@
         </select>
         <button class="calc-btn" onclick="calculate1RM()">1RM 계산</button>
     </div>
-    <div class="result-container">
-        <div id="result-box" class="result-box"></div>
-    </div>
+    <div id="result-box" style="display: none; margin-top: 15px; font-size: 18px; font-weight: bold;"></div>
     <script>
         let isKg = true;
 
