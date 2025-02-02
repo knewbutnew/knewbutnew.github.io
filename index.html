@@ -66,6 +66,22 @@
         .calc-btn:hover, .toggle-btn:hover {
             opacity: 0.8;
         }
+
+        .result-container {
+            max-width: 400px;
+            margin: auto;
+            margin-top: 15px;
+        }
+
+        .result-box {
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: #fff;
+        }
     </style>
 </head>
 <body>
@@ -87,16 +103,31 @@
         <input type="number" id="weight" min="1" placeholder="Weight(무게)">
         <button class="toggle-btn" onclick="toggleUnit()">kg</button>
         <select id="rpe">
-            <option value="" disabled selected>RPE(자각도)</option>
-            <option>7</option><option>8</option><option>9</option><option>10</option>
+            <option value="" disabled selected>RPE(운동자각도)</option>
+            <option value="7">7</option>
+            <option value="7.5">7.5</option>
+            <option value="8">8</option>
+            <option value="8.5">8.5</option>
+            <option value="9">9</option>
+            <option value="9.5">9.5</option>
+            <option value="10">10</option>
         </select>
         <button class="calc-btn" onclick="calculate1RM()">Calculate(계산하기)</button>
     </div>
-    <div id="result-box" style="display: none; margin-top: 15px; font-size: 18px; font-weight: bold;"></div>
+    <div id="results" class="result-container" style="display: none;"></div>
     <script>
         let isKg = true;
 
         function toggleUnit() {
+            let weightInput = document.getElementById("weight");
+            let weightValue = parseFloat(weightInput.value);
+            if (!isNaN(weightValue) && weightValue > 0) {
+                if (isKg) {
+                    weightInput.value = (weightValue * 2.20462).toFixed(2);
+                } else {
+                    weightInput.value = (weightValue / 2.20462).toFixed(2);
+                }
+            }
             isKg = !isKg;
             let calculator = document.getElementById("calculator");
             if (isKg) {
@@ -110,27 +141,29 @@
         }
 
         function calculate1RM() {
+            let resultsContainer = document.getElementById("results");
+            resultsContainer.innerHTML = "";
+            
             let weight = parseFloat(document.getElementById("weight").value);
             let reps = parseInt(document.getElementById("reps").value);
-            let rpe = parseInt(document.getElementById("rpe").value);
-            let exercise = document.getElementById("exercise").value;
-
-            if (!weight || weight <= 0 || !reps || !rpe || !exercise) {
-                alert("모든 값을 올바르게 입력하세요.");
+            let rpe = parseFloat(document.getElementById("rpe").value);
+            
+            if (isNaN(weight) || isNaN(reps) || isNaN(rpe) || weight <= 0) {
+                alert("모든 값을 올바르게 입력해주세요.");
                 return;
             }
-
-            if (!isKg) weight *= 0.453592;
-
-            let estimated1RM = weight * (1 + 0.0333 * reps);
-            let rpeAdjustment = 1 - (10 - rpe) * 0.025;
-            const modifiers = { "squat": 1.02, "bench": 1.00, "deadlift": 1.03, "ohp": 0.98 };
-            let final1RM = estimated1RM * rpeAdjustment * modifiers[exercise];
-            if (!isKg) final1RM *= 2.20462;
-
-            let resultBox = document.getElementById("result-box");
-            resultBox.style.display = "block";
-            resultBox.innerText = `1RM 결과: ${final1RM.toFixed(2)} ${isKg ? "KG" : "LBS"}`;
+            
+            let oneRM = weight / (1.0278 - 0.0278 * reps);
+            
+            for (let i = 1; i <= 10; i++) {
+                let estimatedRM = oneRM * (1.0278 - 0.0278 * i);
+                let resultBox = document.createElement("div");
+                resultBox.className = "result-box";
+                resultBox.textContent = `${i}RM: ${estimatedRM.toFixed(2)} ${isKg ? "kg" : "lbs"}`;
+                resultsContainer.appendChild(resultBox);
+            }
+            
+            resultsContainer.style.display = "block";
         }
     </script>
 </body>
