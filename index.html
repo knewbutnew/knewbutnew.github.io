@@ -137,19 +137,19 @@
                 return;
             }
 
-            // 모든 운동에 Epley 공식 적용
-            let oneRM = weight * (1 + 0.0333 * reps);
+            let oneRM = (exercise === "squat" || exercise === "deadlift") ?
+                weight * (1 + 0.0333 * reps) :
+                weight * (36 / (37 - reps));
 
-            // RPE 보정 (RPE 10 기준)
-            oneRM *= 1 + ((rpe - 10) / 10);
+            const rpeAdjustment = { 7: 0.925, 7.5: 0.9425, 8: 0.9575, 8.5: 0.9725, 9: 0.9875, 9.5: 0.995, 10: 1.0 };
+            oneRM /= rpeAdjustment[rpe];
 
             let unit = isKg ? "kg" : "lbs";
             let resultContainer = document.getElementById("result-container");
             resultContainer.innerHTML = "";
 
             for (let i = 1; i <= 10; i++) {
-                let estimatedRM = weight * (1 + 0.0333 * (reps - i));  // Epley 공식을 정확히 적용
-                estimatedRM = Math.max(estimatedRM, 0);  // 음수 방지
+                let estimatedRM = oneRM / (1 + 0.0333 * (i - 1));
                 let resultBox = document.createElement("div");
                 resultBox.classList.add("result-box");
                 resultBox.innerText = `${i}RM ${estimatedRM.toFixed(2)} ${unit}`;
