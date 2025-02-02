@@ -13,18 +13,25 @@
             flex-direction: column;
             font-family: Arial, sans-serif;
         }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 320px;
+        }
         .input-group {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin: 5px;
+            width: 100%;
+            margin: 5px 0;
         }
         .input-group label {
             width: 100px;
             text-align: right;
-            margin-right: 10px;
             font-size: 16px;
         }
-        input, select, button {
+        select, input {
             width: 200px;
             height: 40px;
             text-align: center;
@@ -32,14 +39,35 @@
             border-radius: 5px;
             font-size: 16px;
         }
-        button {
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .calculate-btn {
+            width: 100px;
+            height: 40px;
             background-color: #2E9AFE;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
+            font-size: 16px;
+            margin-right: 10px;
         }
-        button:hover {
+        .toggle {
+            width: 100px;
+            height: 40px;
+            background-color: #2E9AFE;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .calculate-btn:hover, .toggle:hover {
             background-color: #1E7ACF;
         }
         #result {
@@ -50,37 +78,81 @@
     </style>
 </head>
 <body>
-    <div class="input-group">
-        <label for="input1">Reps:</label>
-        <input type="number" id="input1" placeholder="반복 횟수">
+    <div class="container">
+        <div class="input-group">
+            <label for="operation">Exercise:</label>
+            <select id="operation">
+                <option value="1">Squat</option>
+                <option value="2">Bench Press</option>
+                <option value="3">Deadlift</option>
+                <option value="4">Overhead Press</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="input1">Reps:</label>
+            <select id="input1">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="input2">Weight:</label>
+            <input type="number" id="input2" placeholder="무게" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="input3">RPE:</label>
+            <select id="input3">
+                <option value="10" selected>10</option>
+                <option value="9">9</option>
+                <option value="8">8</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        
+        <div class="button-group">
+            <button class="calculate-btn" onclick="calculate()">계산하기</button>
+            <button class="toggle" onclick="toggleUnit()" id="unit-toggle">kg</button>
+        </div>
+        
+        <div id="result">결과: </div>
     </div>
-    <div class="input-group">
-        <label for="input2">Weight:</label>
-        <input type="number" id="input2" placeholder="무게 (kg)">
-    </div>
-    <div class="input-group">
-        <label for="input3">RPE:</label>
-        <input type="number" id="input3" placeholder="RPE 값">
-    </div>
-    
-    <select id="operation">
-        <option value="1">Squat</option>
-        <option value="2">Bench Press</option>
-        <option value="3">Deadlift</option>
-        <option value="4">Overhead Press</option>
-    </select>
-    
-    <button onclick="calculate()">계산하기</button>
-    
-    <div id="result">결과: </div>
 
     <script>
+        let isKg = true;
+        function toggleUnit() {
+            let unitButton = document.getElementById('unit-toggle');
+            let weightInput = document.getElementById('input2');
+            if (isKg) {
+                weightInput.placeholder = "무게 (lbs)";
+                unitButton.innerText = "lbs";
+            } else {
+                weightInput.placeholder = "무게 (kg)";
+                unitButton.innerText = "kg";
+            }
+            isKg = !isKg;
+        }
+
         function calculate() {
             let num1 = parseFloat(document.getElementById('input1').value) || 0;
             let num2 = parseFloat(document.getElementById('input2').value) || 0;
             let num3 = parseFloat(document.getElementById('input3').value) || 0;
             let operation = parseInt(document.getElementById('operation').value);
             let result;
+            
+            if (!isKg) {
+                num2 = num2 * 0.453592; // lbs to kg 변환
+            }
             
             switch (operation) {
                 case 1:
@@ -99,7 +171,7 @@
                     result = "잘못된 옵션";
             }
             
-            document.getElementById('result').innerText = '결과: ' + result;
+            document.getElementById('result').innerText = '결과: ' + result.toFixed(2);
         }
     </script>
 </body>
