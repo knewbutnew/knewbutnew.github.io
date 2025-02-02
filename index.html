@@ -13,10 +13,20 @@
             flex-direction: column;
             font-family: Arial, sans-serif;
         }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin: 5px;
+        }
+        .input-group label {
+            width: 100px;
+            text-align: right;
+            margin-right: 10px;
+            font-size: 16px;
+        }
         input, select, button {
             width: 200px;
             height: 40px;
-            margin: 10px;
             text-align: center;
             border: 2px solid #2E9AFE;
             border-radius: 5px;
@@ -27,6 +37,7 @@
             color: white;
             border: none;
             cursor: pointer;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #1E7ACF;
@@ -39,15 +50,24 @@
     </style>
 </head>
 <body>
-    <input type="number" id="input1" placeholder="숫자 입력 1">
-    <input type="number" id="input2" placeholder="숫자 입력 2">
-    <input type="number" id="input3" placeholder="숫자 입력 3">
+    <div class="input-group">
+        <label for="input1">Reps:</label>
+        <input type="number" id="input1" placeholder="반복 횟수">
+    </div>
+    <div class="input-group">
+        <label for="input2">Weight:</label>
+        <input type="number" id="input2" placeholder="무게 (kg)">
+    </div>
+    <div class="input-group">
+        <label for="input3">RPE:</label>
+        <input type="number" id="input3" placeholder="RPE 값">
+    </div>
     
     <select id="operation">
-        <option value="1">덧셈</option>
-        <option value="2">곱셈</option>
-        <option value="3">최대값</option>
-        <option value="4">평균</option>
+        <option value="1">Squat</option>
+        <option value="2">Bench Press</option>
+        <option value="3">Deadlift</option>
+        <option value="4">Overhead Press</option>
     </select>
     
     <button onclick="calculate()">계산하기</button>
@@ -79,11 +99,6 @@
                     result = "잘못된 옵션";
             }
             
-            document.getElementById('result').innerText = '결과: ' + result;
-        }
-    </script>
-</body>
-</html>
             document.getElementById('result').innerText = '결과: ' + result;
         }
     </script>
