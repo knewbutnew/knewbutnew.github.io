@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1RM 계산기</title>
+    <title>1RM 계산기 NSCA</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -13,7 +13,7 @@
             padding: 20px;
         }
 
-        .container, .result-container {
+        .container {
             max-width: 400px;
             margin: auto;
             padding: 20px;
@@ -25,7 +25,7 @@
         }
 
         .kg-border input, .kg-border select {
-            border: 2px solid #2196F3;
+            border: 2px solid #007BFF;
         }
 
         .lbs-border input, .lbs-border select {
@@ -54,7 +54,7 @@
         }
 
         .kg-border .calc-btn, .kg-border .toggle-btn {
-            background: #2196F3;
+            background: #007BFF;
             color: white;
         }
 
@@ -66,10 +66,21 @@
         .calc-btn:hover, .toggle-btn:hover {
             opacity: 0.8;
         }
+
+        .result-box {
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <h1>1RM 계산기</h1>
+    <h1>1RM 계산기 NSCA</h1>
     <div class="container kg-border" id="calculator">
         <select id="exercise">
             <option value="" disabled selected>Exercise(운동 종목)</option>
@@ -98,7 +109,7 @@
         </select>
         <button class="calc-btn" onclick="calculate1RM()">Calculate(계산하기)</button>
     </div>
-    <div id="result-container" class="result-container" style="display: none; margin-top: 15px;"></div>
+    <div id="result-container"></div>
     <script>
         let isKg = true;
 
@@ -106,47 +117,44 @@
             let weightInput = document.getElementById("weight");
             let weightValue = parseFloat(weightInput.value);
             if (!isNaN(weightValue) && weightValue > 0) {
-                if (isKg) {
-                    weightInput.value = (weightValue * 2.20462).toFixed(2);
-                } else {
-                    weightInput.value = (weightValue / 2.20462).toFixed(2);
-                }
+                weightInput.value = isKg ? (weightValue * 2.20462).toFixed(2) : (weightValue / 2.20462).toFixed(2);
             }
             isKg = !isKg;
             let calculator = document.getElementById("calculator");
-            if (isKg) {
-                calculator.classList.remove("lbs-border");
-                calculator.classList.add("kg-border");
-            } else {
-                calculator.classList.remove("kg-border");
-                calculator.classList.add("lbs-border");
-            }
+            calculator.classList.toggle("kg-border", isKg);
+            calculator.classList.toggle("lbs-border", !isKg);
             document.querySelector(".toggle-btn").innerText = isKg ? "kg" : "lbs";
         }
 
         function calculate1RM() {
-            let resultContainer = document.getElementById("result-container");
-            resultContainer.innerHTML = "";
-            
+            let exercise = document.getElementById("exercise").value;
             let weight = parseFloat(document.getElementById("weight").value);
             let reps = parseInt(document.getElementById("reps").value);
             let rpe = parseFloat(document.getElementById("rpe").value);
-            
-            if (isNaN(weight) || isNaN(reps) || isNaN(rpe) || weight <= 0) {
+
+            if (!exercise || isNaN(weight) || isNaN(reps) || weight <= 0 || !rpe) {
                 alert("모든 값을 올바르게 입력해주세요.");
                 return;
             }
-            
-            let oneRM = weight / (1.0278 - 0.0278 * reps);
-            
+
+            // 모든 운동에 Epley 공식 적용
+            let oneRM = weight * (1 + 0.0333 * reps);
+
+            // RPE 보정 (RPE 10 기준)
+            oneRM *= 1 + ((rpe - 10) / 10);
+
+            let unit = isKg ? "kg" : "lbs";
+            let resultContainer = document.getElementById("result-container");
+            resultContainer.innerHTML = "";
+
             for (let i = 1; i <= 10; i++) {
-                let estimatedRM = oneRM * (1.0278 - 0.0278 * i);
+                let estimatedRM = weight * (1 + 0.0333 * (reps - i));  // Epley 공식을 정확히 적용
+                estimatedRM = Math.max(estimatedRM, 0);  // 음수 방지
                 let resultBox = document.createElement("div");
-                resultBox.classList.add("result-container");
-                resultBox.innerHTML = `<p>${i}RM: ${estimatedRM.toFixed(2)} ${isKg ? "kg" : "lbs"}</p>`;
+                resultBox.classList.add("result-box");
+                resultBox.innerText = `${i}RM ${estimatedRM.toFixed(2)} ${unit}`;
                 resultContainer.appendChild(resultBox);
             }
-            resultContainer.style.display = "block";
         }
     </script>
 </body>
