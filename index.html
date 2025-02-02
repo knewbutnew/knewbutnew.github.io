@@ -3,170 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자동 계산기</title>
+    <title>1RM 계산기</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-            background-color: white;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 0.5fr 1fr;
-            grid-template-rows: repeat(5, auto);
-            gap: 10px;
-            width: 300px;
-        }
-        .label-group {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .input-group {
-            display: flex;
-            justify-content: flex-start;
-            width: 100%;
-        }
-        select, input {
-            width: 100%;
-            height: 40px;
+            font-family: 'Arial', sans-serif;
+            background-color: #fff;
+            color: #333;
             text-align: center;
-            border: 2px solid #2E9AFE;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 20px;
         }
-        .button-group {
-            display: flex;
-            justify-content: space-between;
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background: #fff;
+        }
+
+        .kg-border input, .kg-border select, .kg-border .toggle-btn, .kg-border .calc-btn {
+            border: 2px solid #FF9800;
+        }
+
+        .lbs-border input, .lbs-border select, .lbs-border .toggle-btn, .lbs-border .calc-btn {
+            border: 2px solid #4CAF50;
+        }
+
+        select, input, button {
             width: 100%;
-            grid-column: span 3;
-        }
-        .calculate-btn, .toggle {
-            width: 120px;
-            height: 40px;
-            background-color: #2E9AFE;
-            color: white;
+            padding: 12px;
+            margin: 10px 0;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             font-size: 16px;
-        }
-        .calculate-btn:hover, .toggle:hover {
-            background-color: #1E7ACF;
-        }
-        #result {
-            grid-column: span 3;
+            box-sizing: border-box;
             text-align: center;
-            font-size: 24px;
+        }
+
+        input {
+            text-align: center;
+        }
+
+        .calc-btn {
+            cursor: pointer;
+            transition: 0.3s;
             font-weight: bold;
+        }
+
+        .kg-border .calc-btn {
+            background: #FF9800;
+            color: white;
+        }
+
+        .lbs-border .calc-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .calc-btn:hover {
+            opacity: 0.8;
+        }
+
+        .toggle-btn {
+            background: white;
+            color: black;
+        }
+
+        .result-container {
+            margin-top: 15px;
+        }
+
+        .result-box {
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="label-group">Exercise (종목)</div>
-        <div></div>
-        <div class="input-group">
-            <select id="operation">
-                <option value="1">Squat</option>
-                <option value="2">Bench Press</option>
-                <option value="3">Deadlift</option>
-                <option value="4">Overhead Press</option>
-            </select>
-        </div>
-        <div class="label-group">Reps (횟수)</div>
-        <div></div>
-        <div class="input-group">
-            <select id="input1">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-        <div class="label-group">Weight (무게)</div>
-        <div></div>
-        <div class="input-group">
-            <input type="number" id="input2" placeholder="무게" value="" min="0.1">
-        </div>
-        <div class="label-group">RPE (자각도)</div>
-        <div></div>
-        <div class="input-group">
-            <select id="input3">
-                <option value="10" selected>10</option>
-                <option value="9">9</option>
-                <option value="8">8</option>
-                <option value="7">7</option>
-            </select>
-        </div>
-        <div class="button-group">
-            <button class="calculate-btn" onclick="calculate()">계산하기</button>
-            <button class="toggle" onclick="toggleUnit()" id="unit-toggle">kg</button>
-        </div>
-        <div id="result">결과: </div>
+    <h1>1RM 계산기</h1>
+    <div class="container kg-border" id="calculator">
+        <select id="exercise">
+            <option value="" disabled selected>Exercise(운동 종목)</option>
+            <option value="squat">스쿼트</option>
+            <option value="bench">벤치프레스</option>
+            <option value="deadlift">데드리프트</option>
+            <option value="ohp">오버헤드프레스</option>
+        </select>
+        <select id="reps">
+            <option value="" disabled selected>Reps(횟수)</option>
+            <option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6</option>
+            <option>7</option><option>8</option><option>9</option><option>10</option>
+        </select>
+        <input type="number" id="weight" min="1" placeholder="Weight(무게)">
+        <button class="toggle-btn" onclick="toggleUnit()">현재 단위: KG</button>
+        <select id="rpe">
+            <option value="" disabled selected>RPE(자각도)</option>
+            <option>7</option><option>8</option><option>9</option><option>10</option>
+        </select>
+        <button class="calc-btn" onclick="calculate1RM()">1RM 계산</button>
     </div>
-
+    <div class="result-container">
+        <div id="result-box" class="result-box"></div>
+    </div>
     <script>
         let isKg = true;
+
         function toggleUnit() {
-            let unitButton = document.getElementById('unit-toggle');
-            let weightInput = document.getElementById('input2');
-            
-            if (isKg) {
-                weightInput.placeholder = "무게 (lbs)";
-                unitButton.innerText = "lbs";
-            } else {
-                weightInput.placeholder = "무게 (kg)";
-                unitButton.innerText = "kg";
-            }
             isKg = !isKg;
+            let calculator = document.getElementById("calculator");
+            if (isKg) {
+                calculator.classList.remove("lbs-border");
+                calculator.classList.add("kg-border");
+            } else {
+                calculator.classList.remove("kg-border");
+                calculator.classList.add("lbs-border");
+            }
+            document.querySelector(".toggle-btn").innerText = isKg ? "현재 단위: KG" : "현재 단위: LBS";
         }
 
-        function calculate() {
-            let num1 = parseFloat(document.getElementById('input1').value) || 0;
-            let num2 = parseFloat(document.getElementById('input2').value) || 0;
-            let num3 = parseFloat(document.getElementById('input3').value) || 0;
-            let operation = parseInt(document.getElementById('operation').value);
-            let result;
-            
-            if (num2 <= 0) {
-                alert("Weight는 0보다 큰 값이어야 합니다.");
+        function calculate1RM() {
+            let weight = parseFloat(document.getElementById("weight").value);
+            let reps = parseInt(document.getElementById("reps").value);
+            let rpe = parseInt(document.getElementById("rpe").value);
+            let exercise = document.getElementById("exercise").value;
+
+            if (!weight || weight <= 0 || !reps || !rpe || !exercise) {
+                alert("모든 값을 올바르게 입력하세요.");
                 return;
             }
-            
-            if (!isKg) {
-                num2 = num2 * 0.453592;
-            }
-            
-            switch (operation) {
-                case 1:
-                    result = num1 + num2 + num3;
-                    break;
-                case 2:
-                    result = num1 * num2 * num3;
-                    break;
-                case 3:
-                    result = Math.max(num1, num2, num3);
-                    break;
-                case 4:
-                    result = (num1 + num2 + num3) / 3;
-                    break;
-                default:
-                    result = "잘못된 옵션";
-            }
-            
-            document.getElementById('result').innerText = '결과: ' + result.toFixed(2);
+
+            if (!isKg) weight *= 0.453592;
+
+            let estimated1RM = weight * (1 + 0.0333 * reps);
+            let rpeAdjustment = 1 - (10 - rpe) * 0.025;
+            const modifiers = { "squat": 1.02, "bench": 1.00, "deadlift": 1.03, "ohp": 0.98 };
+            let final1RM = estimated1RM * rpeAdjustment * modifiers[exercise];
+            if (!isKg) final1RM *= 2.20462;
+
+            let resultBox = document.getElementById("result-box");
+            resultBox.style.display = "block";
+            resultBox.innerText = `1RM 결과: ${final1RM.toFixed(2)} ${isKg ? "KG" : "LBS"}`;
         }
     </script>
 </body>
