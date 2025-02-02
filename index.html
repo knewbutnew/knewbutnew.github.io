@@ -73,10 +73,10 @@
     <div class="container kg-border" id="calculator">
         <select id="exercise">
             <option value="" disabled selected>Exercise(운동 종목)</option>
-            <option value="squat">스쿼트</option>
-            <option value="bench">벤치프레스</option>
-            <option value="deadlift">데드리프트</option>
-            <option value="ohp">오버헤드프레스</option>
+            <option value="squat">Squat(스쿼트)</option>
+            <option value="bench">Bench Press(벤치프레스)</option>
+            <option value="deadlift">Deadlift(데드리프트)</option>
+            <option value="ohp">Overhead Press(오버헤드프레스)</option>
         </select>
         <select id="reps">
             <option value="" disabled selected>Reps(횟수)</option>
@@ -85,12 +85,12 @@
             <option>7</option><option>8</option><option>9</option><option>10</option>
         </select>
         <input type="number" id="weight" min="1" placeholder="Weight(무게)">
-        <button class="toggle-btn" onclick="toggleUnit()">현재 단위: KG</button>
+        <button class="toggle-btn" onclick="toggleUnit()">kg</button>
         <select id="rpe">
             <option value="" disabled selected>RPE(자각도)</option>
             <option>7</option><option>8</option><option>9</option><option>10</option>
         </select>
-        <button class="calc-btn" onclick="calculate1RM()">1RM 계산</button>
+        <button class="calc-btn" onclick="calculate1RM()">Calculate(계산하기)</button>
     </div>
     <div id="result-box" style="display: none; margin-top: 15px; font-size: 18px; font-weight: bold;"></div>
     <script>
@@ -106,7 +106,7 @@
                 calculator.classList.remove("kg-border");
                 calculator.classList.add("lbs-border");
             }
-            document.querySelector(".toggle-btn").innerText = isKg ? "현재 단위: KG" : "현재 단위: LBS";
+            document.querySelector(".toggle-btn").innerText = isKg ? "kg" : "lbs";
         }
 
         function calculate1RM() {
