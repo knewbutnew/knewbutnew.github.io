@@ -13,23 +13,20 @@
             flex-direction: column;
             font-family: Arial, sans-serif;
         }
-        input {
+        input, select, button {
             width: 200px;
-            height: 30px;
+            height: 40px;
             margin: 10px;
             text-align: center;
             border: 2px solid #2E9AFE;
             border-radius: 5px;
+            font-size: 16px;
         }
         button {
             background-color: #2E9AFE;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
             cursor: pointer;
-            margin: 5px;
         }
         button:hover {
             background-color: #1E7ACF;
@@ -46,21 +43,26 @@
     <input type="number" id="input2" placeholder="숫자 입력 2">
     <input type="number" id="input3" placeholder="숫자 입력 3">
     
-    <button onclick="calculate(1)">옵션 1 (덧셈)</button>
-    <button onclick="calculate(2)">옵션 2 (곱셈)</button>
-    <button onclick="calculate(3)">옵션 3 (최대값)</button>
-    <button onclick="calculate(4)">옵션 4 (평균)</button>
+    <select id="operation">
+        <option value="1">덧셈</option>
+        <option value="2">곱셈</option>
+        <option value="3">최대값</option>
+        <option value="4">평균</option>
+    </select>
+    
+    <button onclick="calculate()">계산하기</button>
     
     <div id="result">결과: </div>
 
     <script>
-        function calculate(option) {
+        function calculate() {
             let num1 = parseFloat(document.getElementById('input1').value) || 0;
             let num2 = parseFloat(document.getElementById('input2').value) || 0;
             let num3 = parseFloat(document.getElementById('input3').value) || 0;
+            let operation = parseInt(document.getElementById('operation').value);
             let result;
             
-            switch (option) {
+            switch (operation) {
                 case 1:
                     result = num1 + num2 + num3;
                     break;
@@ -77,6 +79,11 @@
                     result = "잘못된 옵션";
             }
             
+            document.getElementById('result').innerText = '결과: ' + result;
+        }
+    </script>
+</body>
+</html>
             document.getElementById('result').innerText = '결과: ' + result;
         }
     </script>
