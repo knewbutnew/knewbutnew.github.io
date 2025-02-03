@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://knewbutnew.github.io/
+Sitemap: https://knewbutnew.github.io/sitemap.xml
